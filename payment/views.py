@@ -25,7 +25,6 @@ def payment_process(request):
         }
         for item in order.items.all():
             session_data['line_items'].append( {
-                
                     'price_data': {
                         'unit_amount' : int(item.price*Decimal('100')),
                         'currency':'usd',
@@ -35,6 +34,13 @@ def payment_process(request):
                 },
                 'quantity':item.quantity,
             })
+        if order.coupon:
+            stripe_coupon = stripe.Coupon.create(
+                name = order.coupon.code,
+                percent_off = order.coupon.discount,
+                duration = 'once'
+            )
+            session_data['discounts'] = [{'coupon':stripe_coupon}]
         session = stripe.checkout.Session.create(**session_data)
         return redirect(session.url,code=303)
     else:

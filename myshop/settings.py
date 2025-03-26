@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 
 from pathlib import Path
 from decouple import config
+from django.utils.translation  import gettext_lazy as _
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -41,12 +42,19 @@ INSTALLED_APPS = [
     'shop.apps.ShopConfig',
     'cart.apps.CartConfig',
     'order.apps.OrderConfig',
-    'payment.apps.PaymentConfig'
+    'payment.apps.PaymentConfig',
+    'coupons.apps.CouponsConfig',
+    #imported
+    'rosetta',
+    'parler',
+    'localflavor'
+
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware', # Handling session
+    'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -141,3 +149,31 @@ STRIPE_SECRET_KEY=config('STRIPE_SECRET_KEY')
 STRIPE_API_VERSION='2025-02-24'
 STRIPE_WEBHOOK_SECRET=config('STRIPE_WEBHOOK_SECRET')
 
+
+
+
+REDIS_HOST='localhost'
+REDIS_PORT=6379
+REDIS_DB=1
+
+
+
+LANGAUGES =[
+    ('en',_('English')),
+    ('es',_('Spanish')),
+]
+LANGUAGE_CODE = 'en'
+
+LOCALE_PATHS=[
+    BASE_DIR / 'locale'
+]
+PARLER_LANGUAGES = {
+    None:   (
+        {'code':'en'},
+        {'code':'es'}
+    ),
+    'default' : {
+        'fallback':'en',
+        'hide_untranslated':False,
+    }
+}
