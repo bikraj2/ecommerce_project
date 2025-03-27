@@ -1,6 +1,6 @@
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.http import require_POST
-
+from django.conf import settings
 from cart.forms import CartAddProductForm
 from coupons.forms import CouponApplyForm
 from shop.recommender import Recommender
@@ -41,6 +41,7 @@ def cart_detail(request):
     coupon_apply_form = CouponApplyForm()
     r = Recommender()
     cart_products = [item['product'] for item in cart]
+     
     if cart_products:
         recommended_products = r.suggest_products_for(cart_products,max_results=4)
     else:

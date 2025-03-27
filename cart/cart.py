@@ -1,6 +1,5 @@
 from decimal import Decimal
 
-from celery.utils.functional import pass1
 from coupons.models import Coupon
 from shop.models import Product
 from django.conf import settings
@@ -67,5 +66,5 @@ class Cart:
                 self.coupon.discount / Decimal(100) 
             ) * self.get_total_price()
         return Decimal(0)
-    def get_total_cost_after_discount(self):
+    def get_total_cost_after_discount():
         return self.get_total_price() - self.get_discount()
